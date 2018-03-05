@@ -44,6 +44,16 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="blZ-ph-TOW">
+                                <rect key="frame" x="16" y="58" width="343" height="188"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="188" id="7P0-CR-Zr9"/>
+                                    <constraint firstAttribute="width" constant="343" id="DEa-Yc-oWc"/>
+                                </constraints>
+                            </imageView>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="iuB-BO-4XZ">
+                                <rect key="frame" x="180" y="574" width="20" height="20"/>
+                            </activityIndicatorView>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Z5f-Ob-T90">
                                 <rect key="frame" x="22" y="20" width="34" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -52,16 +62,35 @@
                                     <action selector="goBack:" destination="sF7-Vg-E5h" eventType="touchUpInside" id="zSL-lJ-peA"/>
                                 </connections>
                             </button>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="blZ-ph-TOW">
-                                <rect key="frame" x="16" y="58" width="343" height="319"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                            </imageView>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="rFq-g4-4C7">
+                                <rect key="frame" x="19" y="276" width="337" height="128"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="337" id="JJt-fy-N4L"/>
+                                    <constraint firstAttribute="height" constant="128" id="aKz-ff-5si"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="rFq-g4-4C7" firstAttribute="leading" secondItem="iuB-BO-4XZ" secondAttribute="trailing" constant="-181" id="0yA-uG-vx0"/>
+                            <constraint firstItem="rFq-g4-4C7" firstAttribute="leading" secondItem="z3D-Fi-ib9" secondAttribute="leading" constant="19" id="3UF-An-7HO"/>
+                            <constraint firstItem="z3D-Fi-ib9" firstAttribute="trailing" secondItem="iuB-BO-4XZ" secondAttribute="trailing" constant="175" id="92C-wa-rSl"/>
+                            <constraint firstItem="iuB-BO-4XZ" firstAttribute="top" secondItem="rFq-g4-4C7" secondAttribute="bottom" constant="170" id="CTG-kQ-mMK"/>
+                            <constraint firstItem="z3D-Fi-ib9" firstAttribute="trailing" secondItem="rFq-g4-4C7" secondAttribute="trailing" constant="19" id="ECc-8w-X4G"/>
+                            <constraint firstItem="iuB-BO-4XZ" firstAttribute="leading" secondItem="z3D-Fi-ib9" secondAttribute="leading" constant="180" id="XQd-tm-Hbc"/>
+                            <constraint firstItem="rFq-g4-4C7" firstAttribute="top" secondItem="blZ-ph-TOW" secondAttribute="bottom" constant="30" id="cZX-9r-oqZ"/>
+                            <constraint firstItem="z3D-Fi-ib9" firstAttribute="bottom" secondItem="rFq-g4-4C7" secondAttribute="bottom" constant="263" id="ctr-uQ-GKV"/>
+                            <constraint firstItem="z3D-Fi-ib9" firstAttribute="bottom" secondItem="iuB-BO-4XZ" secondAttribute="bottom" constant="73" id="dGd-rF-LLe"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="z3D-Fi-ib9"/>
                     </view>
                     <connections>
                         <outlet property="imageView" destination="blZ-ph-TOW" id="ywX-ZH-8CN"/>
+                        <outlet property="indicator" destination="iuB-BO-4XZ" id="Voz-5f-AK9"/>
+                        <outlet property="tfData" destination="rFq-g4-4C7" id="DsD-TU-r3n"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="WtH-aW-oIX" userLabel="First Responder" sceneMemberID="firstResponder"/>
