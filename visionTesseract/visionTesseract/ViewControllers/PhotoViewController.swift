@@ -8,9 +8,12 @@
 
 import UIKit
 import TesseractOCR
+import Vision
+
 class PhotoViewController: UIViewController {
     
     var takenPhoto:UIImage?
+    var requests: [VNRequest] = [VNRequest]()
     
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var tfData: UITextView!
@@ -25,6 +28,7 @@ class PhotoViewController: UIViewController {
             imageView.image = availableImage
             imageView.contentMode = .scaleAspectFit
             
+            startTextDetection()
             self.performImageRecognition(self.cropImageFrontLeftName(screenshot: (imageView.image?.g8_blackAndWhite())!))
 
             self.performImageRecognition(self.cropImageFrontLeftDir(screenshot: (imageView.image?.g8_blackAndWhite())!))
@@ -38,10 +42,82 @@ class PhotoViewController: UIViewController {
         
     }
     
+    //Vision Text Detection
+    func startTextDetection(){
+        
+        let textRequest = VNDetectTextRectanglesRequest(completionHandler: self.detectTextHandler)
+        textRequest.reportCharacterBoxes = true
+        
+        self.requests = [textRequest]
+    }
     
+    func detectTextHandler(request: VNRequest, error: Error?) {
+        guard let observations = request.results else {
+            print("no result")
+            return
+        }
+        let result = observations.map({$0 as? VNTextObservation})
+        
+        DispatchQueue.main.async() {
+            self.imageView.layer.sublayers?.removeSubrange(1...)
+            for region in result {
+                guard let rg = region else {
+                    continue
+                }
+                
+                self.highlightWord(box: rg)
+            }
+        }
+    }
     
+    func highlightWord(box: VNTextObservation) {
+        guard let boxes = box.characterBoxes else {
+            return
+        }
+        
+        var maxX: CGFloat = 9999.0
+        var minX: CGFloat = 0.0
+        var maxY: CGFloat = 9999.0
+        var minY: CGFloat = 0.0
+        
+        for char in boxes {
+            if char.bottomLeft.x < maxX {
+                maxX = char.bottomLeft.x
+            }
+            if char.bottomRight.x > minX {
+                minX = char.bottomRight.x
+            }
+            if char.bottomRight.y < maxY {
+                maxY = char.bottomRight.y
+            }
+            if char.topRight.y > minY {
+                minY = char.topRight.y
+            }
+        }
+        
+        let xCord = maxX * imageView.frame.size.width
+        let yCord = (1 - minY) * imageView.frame.size.height
+        let width = (minX - maxX) * imageView.frame.size.width
+        let height = (minY - maxY) * imageView.frame.size.height
+        
+        let outline = CALayer()
+        outline.frame = CGRect(x: xCord, y: yCord, width: width, height: height)
+        outline.borderWidth = 2.0
+        outline.borderColor = UIColor.red.cgColor
+        print(outline.frame)
+        imageView.layer.addSublayer(outline)
+    }
     // Tesseract Image Recognition
     func performImageRecognition(_ image: UIImage) {
+       
+        
+        let requestOptions:[VNImageOption : Any] = [:]
+        let imageRequest = VNImageRequestHandler.init(cgImage: image.cgImage!, options: requestOptions)
+        do{
+            try imageRequest.perform(self.requests)
+        }catch let error{
+            print(error.localizedDescription)
+        }
         var isCorrect:Bool = false
         var arrWords = [String]()
         if let tesseract = G8Tesseract.init(language: "spa+Arial", engineMode: G8OCREngineMode.tesseractOnly){
