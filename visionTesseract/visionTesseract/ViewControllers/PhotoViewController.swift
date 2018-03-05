@@ -14,7 +14,8 @@ class PhotoViewController: UIViewController {
     
     var takenPhoto:UIImage?
     var requests: [VNRequest] = [VNRequest]()
-    
+    var imageCropped: UIImageView!
+    var imageOne: UIImage!
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var tfData: UITextView!
     @IBOutlet weak var indicator: UIActivityIndicatorView!
@@ -22,16 +23,16 @@ class PhotoViewController: UIViewController {
     override func viewDidLoad() {
         
         super.viewDidLoad()
-        
+        imageCropped = UIImageView.init(frame: CGRect(x: 10, y: 450, width:imageView.frame.width, height: imageView.frame.height))
         if let availableImage = takenPhoto?.scaleImage(1080) {
             
             imageView.image = availableImage
-            imageView.contentMode = .scaleAspectFit
+            imageView.contentMode = .scaleToFill
             
             startTextDetection()
-            self.performImageRecognition(self.cropImageFrontLeftName(screenshot: (imageView.image?.g8_blackAndWhite())!))
+            self.performImageRecognition(availableImage.g8_blackAndWhite())
 
-            self.performImageRecognition(self.cropImageFrontLeftDir(screenshot: (imageView.image?.g8_blackAndWhite())!))
+//            self.performImageRecognition(self.cropImageFrontLeftDir(screenshot: (imageView.image?.g8_blackAndWhite())!))
             
         }
     }
@@ -52,6 +53,7 @@ class PhotoViewController: UIViewController {
     }
     
     func detectTextHandler(request: VNRequest, error: Error?) {
+        
         guard let observations = request.results else {
             print("no result")
             return
@@ -64,17 +66,20 @@ class PhotoViewController: UIViewController {
                 guard let rg = region else {
                     continue
                 }
+                let resultCGRect = self.highlightWord(box: rg)
+                if let iImage = self.imageCropped.image?.scaleImage(1080), let cgImage = iImage.cgImage, let cgrect = resultCGRect, let croppedImage = cgImage.cropping(to: cgrect) {
+                        self.useTesseract(UIImage.init(cgImage: croppedImage))
+                }
                 
-                self.highlightWord(box: rg)
             }
         }
     }
     
-    func highlightWord(box: VNTextObservation) {
+    func highlightWord(box: VNTextObservation) -> CGRect?{
         guard let boxes = box.characterBoxes else {
-            return
+            return nil
         }
-        
+        var result: CGRect
         var maxX: CGFloat = 9999.0
         var minX: CGFloat = 0.0
         var maxY: CGFloat = 9999.0
@@ -99,18 +104,23 @@ class PhotoViewController: UIViewController {
         let yCord = (1 - minY) * imageView.frame.size.height
         let width = (minX - maxX) * imageView.frame.size.width
         let height = (minY - maxY) * imageView.frame.size.height
-        
         let outline = CALayer()
-        outline.frame = CGRect(x: xCord, y: yCord, width: width, height: height)
+        result = CGRect(x: xCord-1, y: yCord-1, width: width, height: height+2)
+        outline.frame = result
         outline.borderWidth = 2.0
         outline.borderColor = UIColor.red.cgColor
-        print(outline.frame)
+        print(result)
         imageView.layer.addSublayer(outline)
+        return result
     }
     // Tesseract Image Recognition
     func performImageRecognition(_ image: UIImage) {
        
-        
+        //Imagecrop
+        imageCropped.image = image //UIImage(cgImage: (image.cgImage)!, scale: 1.0, orientation: UIImageOrientation.right)
+        //imageCropped.contentMode = UIViewContentMode.scaleToFill
+        self.view.addSubview(imageCropped)
+        imageOne = image
         let requestOptions:[VNImageOption : Any] = [:]
         let imageRequest = VNImageRequestHandler.init(cgImage: image.cgImage!, options: requestOptions)
         do{
@@ -118,61 +128,46 @@ class PhotoViewController: UIViewController {
         }catch let error{
             print(error.localizedDescription)
         }
+    }
+    
+    func useTesseract(_ image: UIImage){
         var isCorrect:Bool = false
         var arrWords = [String]()
-        if let tesseract = G8Tesseract.init(language: "spa+Arial", engineMode: G8OCREngineMode.tesseractOnly){
+        if let tesseract = G8Tesseract.init(language: "spa", engineMode: G8OCREngineMode.tesseractOnly){
             var count: Int = 0
             while(isCorrect != true){
-                
                 //teseract
+                tesseract.pageSegmentationMode = .singleLine
                 
-                tesseract.pageSegmentationMode = .auto
-                //tesseract.image = image.g8_blackAndWhite()
-                //tesseract.charWhitelist = "ABCDEFGHIJKLMNÑOPQRSTUVWXY Z ,0123456789 -."
-                tesseract.analyseLayout()
-                tesseract.recognize()
+                    tesseract.image = image.scaleImage(1080)
+                    //tesseract.charWhitelist = "ABCDEFGHIJKLMNÑOPQRSTUVWXY Z ,0123456789 -."
+                    tesseract.analyseLayout()
+                    tesseract.recognize()
                 
-                
-                
-                //        let img = UIImageView.init(frame: CGRect(x: 100, y: 300, width: 200, height: 170))
-                //
-                //        img.image = tesseract.image(withBlocks: tesseract.recognizedBlocks(by: G8PageIteratorLevel.word), drawText: true, thresholded: true)
-                //
-                //        img.contentMode = UIViewContentMode.scaleAspectFill
-                //        self.view.addSubview(img)
-                
-                //Imagecrop
-                let imageCropped = UIImageView.init(frame: CGRect(x: 100, y: 450, width: 200, height: 170))
-//                let cropImage = self.cropImageFrontLeftName(screenshot: image.g8_blackAndWhite())
-                imageCropped.image = image //UIImage(cgImage: (image.cgImage)!, scale: 1.0, orientation: UIImageOrientation.right)
-                
-                imageCropped.contentMode = UIViewContentMode.scaleAspectFill
-                self.view.addSubview(imageCropped)
-                
-                tesseract.image = imageCropped.image?.g8_blackAndWhite()!
-                
-                
-                arrWords.append(String(describing: tesseract.recognizedText.split(separator: "\n")))
-                G8Tesseract.clearCache()
-                
-                if count == 0{
-                    for row in arrWords{
-                        print("\(row)\n")
+                    
+                    arrWords.append(String(describing: tesseract.recognizedText.split(separator: "\n")))
+                    G8Tesseract.clearCache()
+                    
+                    if count == 0{
+                        for row in arrWords{
+                            print("\(row)\n")
+                        }
+                        isCorrect = true
+                    }else{
+                        print("---------------------")
+                        print(tesseract.recognizedBlocks(by: G8PageIteratorLevel.textline))
+                        count += 1
+                        tesseract.image = nil
                     }
-                    isCorrect = true
-                }else{
-                    print("---------------------")
-                    print(tesseract.recognizedBlocks(by: G8PageIteratorLevel.textline))
-                    count += 1
-                    tesseract.image = nil
-                }
+                self.imageCropped.image = tesseract.image(withBlocks: tesseract.recognizedBlocks(by: G8PageIteratorLevel.textline), drawText: false, thresholded: true)
+  
             }
+            
             tfData.text = tesseract.recognizedText
             //getData(data: arrWords)
         }
         indicator.stopAnimating()
     }
-    
     
     
     func cropImageFrontLeft(screenshot: UIImage) -> UIImage {
@@ -285,7 +280,6 @@ extension UIImage {
     func scaleImage(_ maxDimension: CGFloat) -> UIImage? {
         
         var scaledSize = CGSize(width: maxDimension, height: maxDimension)
-        
         if size.width > size.height {
             let scaleFactor = size.height / size.width
             scaledSize.height = scaledSize.width * scaleFactor
