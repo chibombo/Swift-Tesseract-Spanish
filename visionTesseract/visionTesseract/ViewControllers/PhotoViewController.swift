@@ -29,9 +29,9 @@ class PhotoViewController: UIViewController {
             
             imageView.image = availableImage
             imageView.contentMode = .scaleToFill
-            
-            
-            self.analizeImage()
+            startTextDetection()
+            self.performImageRecognition(self.cropImageFrontLeft(screenshot: (takenPhoto!.scaleImage(1080))!))
+            //self.analizeImage()
         }
     }
     
@@ -100,8 +100,8 @@ class PhotoViewController: UIViewController {
                     self.indicator.stopAnimating()
                 }
             }
-            self.count += 1
-            self.analizeImage()
+            //self.count += 1
+            //self.analizeImage()
         }
     }
     
