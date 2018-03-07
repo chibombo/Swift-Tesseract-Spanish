@@ -17,9 +17,13 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     var captureDevice:AVCaptureDevice!
     
     var takePhoto = false
+    static var isReverso:Bool = false
+    static var count: Int = 0
+    static var countReverso:Int = 0
     
     let screenSize = UIScreen.main.bounds.size
     public static var imgCredencial: UIImageView!
+    public static var lblFoto: UILabel!
     var btnCapturar: UIButton!
     
     override func viewDidLoad() {
@@ -40,8 +44,23 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         ViewController.imgCredencial.layer.borderColor = UIColor.white.cgColor
         self.view.addSubview(ViewController.imgCredencial)
         
+        ViewController.lblFoto = UILabel(frame: CGRect(x:screenSize.width * 0.5 - (screenSize.width * 0.8)/2,
+                                                       y:0,
+                                                       width:screenSize.width * 0.8,
+                                                       height: screenSize.height * 0.5))
+        if ViewController.isReverso == false{
+            ViewController.lblFoto.text = "Tome la foto del anverso de la credencial"
+        }else if ViewController.isReverso == true {
+            ViewController.lblFoto.text = "Tome la foto del reverso de la credencial"
+        }
+        
+        ViewController.lblFoto.font = UIFont.boldSystemFont(ofSize: 25)
+        ViewController.lblFoto.numberOfLines = 0
+        ViewController.lblFoto.textColor = UIColor.white
+        ViewController.lblFoto.textAlignment = .center
+        self.view.addSubview(ViewController.lblFoto)
+        
     }
-    
     
     func prepareCamera() {
         captureSession.sessionPreset = AVCaptureSession.Preset.photo

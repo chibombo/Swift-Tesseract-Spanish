@@ -9,14 +9,16 @@
 import UIKit
 import TesseractOCR
 import Vision
+import AVFoundation
 
 class PhotoViewController: UIViewController {
     
     var takenPhoto:UIImage?
-    var requests: [VNRequest] = [VNRequest]()
+    var requests: [VNRequest] = [VNRequest]()        
     var imageCropped: UIImageView!
     var imageOne: UIImage!
     var count: Int8 = 1
+    @IBOutlet weak var btnNext: UIButton!
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var tfData: UITextView!
     @IBOutlet weak var indicator: UIActivityIndicatorView!
@@ -28,18 +30,56 @@ class PhotoViewController: UIViewController {
         if let availableImage = takenPhoto?.scaleImage(1080) {
             
             imageView.image = availableImage
+
+            imageView.contentMode = .scaleAspectFit
+            if ViewController.isReverso == false{
+                analyze()
+                switch ViewController.count {
+                case 0:
+                    print("Tome una foto del anverso de una credencial")
+                case 1:
+                    print("Es IFE")
+                case 2:
+                    print("Es INE")
+                default:
+                    break
+                }
+            }else if ViewController.isReverso == true {
+                btnNext.removeFromSuperview()
+                analyze()
+                if ViewController.countReverso == 0{
+                    switch ViewController.count {
+                    case 1:
+                        print("Es IFE reverso")
+                    case 2:
+                        print("Es INE reverso")
+                    default:
+                        break
+                    }
+                }else{
+                    print("tome la foto del reverso de la credencial")
+                }
+            }
             imageView.contentMode = .scaleToFill
             startTextDetection()
             self.performImageRecognition(self.cropImageFrontLeft(screenshot: (takenPhoto!.scaleImage(1080))!))
-            //self.analizeImage()
+
         }
     }
     
     @IBAction func goBack(_ sender: Any) {
-        
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    @IBAction func goNext(_ sender: Any) {
         self.dismiss(animated: true, completion: nil)
         
+        if ViewController.count != 0{
+            ViewController.isReverso = true
+        }
+        
     }
+    
     
     //Vision Text Detection
     func startTextDetection(){
@@ -256,6 +296,66 @@ class PhotoViewController: UIViewController {
         let cropImage = screenshot.cgImage?.cropping(to: crop)
         let image = UIImage(cgImage: cropImage!)
         return image
+    }
+    
+    func analyze() {
+        guard let facesCIImage = CIImage(image: imageView.image!)
+            else { fatalError("can't create CIImage from UIImage") }
+        let detectFaceRequest: VNDetectFaceRectanglesRequest = VNDetectFaceRectanglesRequest(completionHandler: self.handleFaces)
+        let detectFaceRequestHandler = VNImageRequestHandler(ciImage: facesCIImage, options: [:])
+        
+        do {
+            try detectFaceRequestHandler.perform([detectFaceRequest])
+        } catch {
+            print(error)
+        }
+    }
+    
+    func handleFaces(request: VNRequest, error: Error?) {
+        guard let observations = request.results as? [VNFaceObservation]
+            else { fatalError("unexpected result type from VNDetectFaceRectanglesRequest") }
+        
+        self.addShapesToFace(forObservations: observations)
+    }
+    
+    func addShapesToFace(forObservations observations: [VNFaceObservation]) {
+        ViewController.countReverso = 0
+        if let sublayers = imageView.layer.sublayers {
+            for layer in sublayers {
+                layer.removeFromSuperlayer()
+            }
+        }
+        
+        let imageRect = AVMakeRect(aspectRatio: imageView.frame.size, insideRect: imageView.bounds)
+        
+        let layers: [CAShapeLayer] = observations.map { observation in
+            
+//            let w = observation.boundingBox.size.width * imageRect.width
+//            let h = observation.boundingBox.size.height * imageRect.height
+//            let x = observation.boundingBox.origin.x * imageRect.width
+//            let y = imageRect.maxY - (observation.boundingBox.origin.y * imageRect.height) - h
+//
+            if ViewController.isReverso == false{
+                ViewController.count += 1
+            }else if ViewController.isReverso == true{
+                ViewController.countReverso += 1
+            }
+            
+//            print("----")
+//            print("W: ", w)
+//            print("H: ", h)
+//            print("X: ", x)
+//            print("Y: ", y)
+//
+//
+            let layer = CAShapeLayer()
+            //layer.frame = CGRect(x: x , y: y, width: w, height: h)
+            layer.borderColor = UIColor.red.cgColor
+            layer.borderWidth = 2
+            layer.cornerRadius = 3
+            return layer
+            
+        }
     }
 }
 
