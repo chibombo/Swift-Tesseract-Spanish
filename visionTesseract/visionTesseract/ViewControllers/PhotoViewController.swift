@@ -14,9 +14,10 @@ import AVFoundation
 class PhotoViewController: UIViewController {
     
     var takenPhoto:UIImage?
-    var requests: [VNRequest] = [VNRequest]()
-    
-    
+    var requests: [VNRequest] = [VNRequest]()        
+    var imageCropped: UIImageView!
+    var imageOne: UIImage!
+    var count: Int8 = 1
     @IBOutlet weak var btnNext: UIButton!
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var tfData: UITextView!
@@ -25,10 +26,11 @@ class PhotoViewController: UIViewController {
     override func viewDidLoad() {
         
         super.viewDidLoad()
-        
+        imageCropped = UIImageView.init(frame: CGRect(x: 10, y: 450, width:imageView.frame.width, height: imageView.frame.height))
         if let availableImage = takenPhoto?.scaleImage(1080) {
             
             imageView.image = availableImage
+
             imageView.contentMode = .scaleAspectFit
             if ViewController.isReverso == false{
                 analyze()
@@ -58,11 +60,10 @@ class PhotoViewController: UIViewController {
                     print("tome la foto del reverso de la credencial")
                 }
             }
+            imageView.contentMode = .scaleToFill
             startTextDetection()
-            //self.performImageRecognition(self.cropImageFrontLeftName(screenshot: (imageView.image?.g8_blackAndWhite())!))
+            self.performImageRecognition(self.cropImageFrontLeft(screenshot: (takenPhoto!.scaleImage(1080))!))
 
-            //self.performImageRecognition(self.cropImageFrontLeftDir(screenshot: (imageView.image?.g8_blackAndWhite())!))
-            
         }
     }
     
@@ -90,6 +91,7 @@ class PhotoViewController: UIViewController {
     }
     
     func detectTextHandler(request: VNRequest, error: Error?) {
+        
         guard let observations = request.results else {
             print("no result")
             return
@@ -102,17 +104,52 @@ class PhotoViewController: UIViewController {
                 guard let rg = region else {
                     continue
                 }
-                
-                self.highlightWord(box: rg)
+                let resultCGRect = self.highlightWord(box: rg)
+                if let cgrect = resultCGRect{
+                    let iImage = self.imageCropped.layer.asImage(rect: cgrect)                    
+                    var isCorrect:Bool = false
+                    var arrWords = [String]()
+                    if let tesseract = G8Tesseract.init(language: "spa", engineMode: G8OCREngineMode.tesseractOnly){
+                        var count: Int = 0
+                        while(isCorrect != true){
+                            //teseract
+                            tesseract.image = iImage.g8_blackAndWhite()
+                            tesseract.recognize()
+                            tesseract.pageSegmentationMode = .autoOSD
+                            tesseract.charWhitelist = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZÁÉÍÓÚ ,0123456789 -."
+                            
+                            let reconized = tesseract.recognizedText.split(separator: "\n")
+                            arrWords.append(String(describing: reconized))
+                            G8Tesseract.clearCache()
+                            
+                            if count == 0{
+                                for row in arrWords{
+                                    print("\(row)\n")
+                                }
+                                isCorrect = true
+                            }else{
+                                print("---------------------")
+                                print(tesseract.recognizedBlocks(by: G8PageIteratorLevel.textline))
+                                count += 1
+                                tesseract.image = nil
+                            }
+                        }
+                        self.tfData.text = tesseract.recognizedText
+                        //getData(data: arrWords)
+                    }
+                    self.indicator.stopAnimating()
+                }
             }
+            //self.count += 1
+            //self.analizeImage()
         }
     }
     
-    func highlightWord(box: VNTextObservation) {
+    func highlightWord(box: VNTextObservation) -> CGRect?{
         guard let boxes = box.characterBoxes else {
-            return
+            return nil
         }
-        
+        var result: CGRect
         var maxX: CGFloat = 9999.0
         var minX: CGFloat = 0.0
         var maxY: CGFloat = 9999.0
@@ -137,18 +174,23 @@ class PhotoViewController: UIViewController {
         let yCord = (1 - minY) * imageView.frame.size.height
         let width = (minX - maxX) * imageView.frame.size.width
         let height = (minY - maxY) * imageView.frame.size.height
-        
         let outline = CALayer()
-        outline.frame = CGRect(x: xCord, y: yCord, width: width, height: height)
+        result = CGRect(x: xCord-2, y: yCord-1, width: width+9, height: height+2)
+        outline.frame = result
         outline.borderWidth = 2.0
         outline.borderColor = UIColor.red.cgColor
-        print(outline.frame)
+        print(result)
         imageView.layer.addSublayer(outline)
+        return result
     }
     // Tesseract Image Recognition
     func performImageRecognition(_ image: UIImage) {
-       
-        
+        self.imageView.image = image
+        //Imagecrop
+        imageCropped.image = image //UIImage(cgImage: (image.cgImage)!, scale: 1.0, orientation: UIImageOrientation.right)
+        imageCropped.contentMode = .scaleToFill
+        self.view.addSubview(imageCropped)
+        imageOne = image
         let requestOptions:[VNImageOption : Any] = [:]
         let imageRequest = VNImageRequestHandler.init(cgImage: image.cgImage!, options: requestOptions)
         do{
@@ -156,61 +198,26 @@ class PhotoViewController: UIViewController {
         }catch let error{
             print(error.localizedDescription)
         }
-        var isCorrect:Bool = false
-        var arrWords = [String]()
-        if let tesseract = G8Tesseract.init(language: "spa+Arial", engineMode: G8OCREngineMode.tesseractOnly){
-            var count: Int = 0
-            while(isCorrect != true){
-                
-                //teseract
-                
-                tesseract.pageSegmentationMode = .auto
-                //tesseract.image = image.g8_blackAndWhite()
-                //tesseract.charWhitelist = "ABCDEFGHIJKLMNÑOPQRSTUVWXY Z ,0123456789 -."
-                tesseract.analyseLayout()
-                tesseract.recognize()
-                
-                
-                
-                //        let img = UIImageView.init(frame: CGRect(x: 100, y: 300, width: 200, height: 170))
-                //
-                //        img.image = tesseract.image(withBlocks: tesseract.recognizedBlocks(by: G8PageIteratorLevel.word), drawText: true, thresholded: true)
-                //
-                //        img.contentMode = UIViewContentMode.scaleAspectFill
-                //        self.view.addSubview(img)
-                
-                //Imagecrop
-                let imageCropped = UIImageView.init(frame: CGRect(x: 100, y: 450, width: 200, height: 170))
-//                let cropImage = self.cropImageFrontLeftName(screenshot: image.g8_blackAndWhite())
-                imageCropped.image = image //UIImage(cgImage: (image.cgImage)!, scale: 1.0, orientation: UIImageOrientation.right)
-                
-                imageCropped.contentMode = UIViewContentMode.scaleAspectFill
-                self.view.addSubview(imageCropped)
-                
-                tesseract.image = imageCropped.image?.g8_blackAndWhite()!
-                
-                
-                arrWords.append(String(describing: tesseract.recognizedText.split(separator: "\n")))
-                G8Tesseract.clearCache()
-                
-                if count == 0{
-                    for row in arrWords{
-                        print("\(row)\n")
-                    }
-                    isCorrect = true
-                }else{
-                    print("---------------------")
-                    print(tesseract.recognizedBlocks(by: G8PageIteratorLevel.textline))
-                    count += 1
-                    tesseract.image = nil
-                }
-            }
-            tfData.text = tesseract.recognizedText
-            //getData(data: arrWords)
-        }
-        indicator.stopAnimating()
     }
     
+    func analizeImage(){
+        startTextDetection()
+        switch self.count{
+        case 0:
+            self.performImageRecognition(self.cropImageFrontLeft(screenshot: (takenPhoto!.scaleImage(1080))!))
+        case 1:
+            self.performImageRecognition(self.cropImageFrontLeftName(screenshot: (takenPhoto!.scaleImage(1080))!))
+            break
+        case 2:
+           self.performImageRecognition(self.cropImageFrontLeftDir(screenshot: (takenPhoto!.scaleImage(1080))!))
+            break
+        case 3:
+           self.performImageRecognition(self.cropImageFrontLefOtherData(screenshot: (takenPhoto!.scaleImage(1080))!))
+            break
+        default:
+            break
+        }
+    }
     
     
     func cropImageFrontLeft(screenshot: UIImage) -> UIImage {
@@ -383,7 +390,6 @@ extension UIImage {
     func scaleImage(_ maxDimension: CGFloat) -> UIImage? {
         
         var scaledSize = CGSize(width: maxDimension, height: maxDimension)
-        
         if size.width > size.height {
             let scaleFactor = size.height / size.width
             scaledSize.height = scaledSize.width * scaleFactor
@@ -398,5 +404,13 @@ extension UIImage {
         UIGraphicsEndImageContext()
         
         return scaledImage
+    }
+}
+extension CALayer {
+    func asImage(rect: CGRect) -> UIImage {
+        let renderer = UIGraphicsImageRenderer(bounds: rect)
+        return renderer.image { rendererContext in
+            self.render(in: rendererContext.cgContext)
+        }
     }
 }
