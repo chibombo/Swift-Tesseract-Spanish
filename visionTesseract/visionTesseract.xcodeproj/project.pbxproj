@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1E0320FD204DA06D005533E3 /* CredencialVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E0320FC204DA06D005533E3 /* CredencialVC.swift */; };
 		1E0944FF2049957C00E62759 /* tessdata in Resources */ = {isa = PBXBuildFile; fileRef = 1E0944FE2049957C00E62759 /* tessdata */; };
 		1E0945032049A10E00E62759 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E0945022049A10E00E62759 /* ViewController.swift */; };
 		1E0945052049A13000E62759 /* PhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E0945042049A13000E62759 /* PhotoViewController.swift */; };
@@ -18,6 +19,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1E0320FC204DA06D005533E3 /* CredencialVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredencialVC.swift; sourceTree = "<group>"; };
 		1E0944FE2049957C00E62759 /* tessdata */ = {isa = PBXFileReference; lastKnownFileType = folder; path = tessdata; sourceTree = "<group>"; };
 		1E0945022049A10E00E62759 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		1E0945042049A13000E62759 /* PhotoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoViewController.swift; sourceTree = "<group>"; };
@@ -65,6 +67,7 @@
 		1E14540B2045E7CC002B5BDD /* visionTesseract */ = {
 			isa = PBXGroup;
 			children = (
+				8320758E2049C0F500BC5419 /* Classes */,
 				1E0944FE2049957C00E62759 /* tessdata */,
 				1EBC22242045E8F200738CE7 /* ViewControllers */,
 				1E14540C2045E7CC002B5BDD /* AppDelegate.swift */,
@@ -81,8 +84,16 @@
 			children = (
 				1E0945022049A10E00E62759 /* ViewController.swift */,
 				1E0945042049A13000E62759 /* PhotoViewController.swift */,
+				1E0320FC204DA06D005533E3 /* CredencialVC.swift */,
 			);
 			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		8320758E2049C0F500BC5419 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Classes;
 			sourceTree = "<group>";
 		};
 		8D2BBAB0421E476C7F6428E7 /* Frameworks */ = {
@@ -232,6 +243,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1E0320FD204DA06D005533E3 /* CredencialVC.swift in Sources */,
 				1E0945032049A10E00E62759 /* ViewController.swift in Sources */,
 				1E14540D2045E7CC002B5BDD /* AppDelegate.swift in Sources */,
 				1E0945052049A13000E62759 /* PhotoViewController.swift in Sources */,
