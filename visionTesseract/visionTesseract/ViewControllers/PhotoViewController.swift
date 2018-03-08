@@ -69,13 +69,10 @@ class PhotoViewController: UIViewController {
             }
             imageView.contentMode = .scaleToFill
             startTextDetection()
-<<<<<<< HEAD
             //self.performImageRecognition(self.cropImageFrontLeftName(screenshot: (imageView.image?.g8_blackAndWhite())!))
             //self.performImageRecognition(self.cropImageFrontLeftDir(screenshot: (imageView.image?.g8_blackAndWhite())!))
-=======
-            self.performImageRecognition(self.cropImageFrontLeft(screenshot: (takenPhoto!.scaleImage(1080))!))
 
->>>>>>> 3df5e50552c250fa0b67c4acebb78ba2daadfe1b
+            self.performImageRecognition(self.cropImageFrontLeft(screenshot: (takenPhoto!.scaleImage(1080))!))
         }
         
     }
