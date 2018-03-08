@@ -65,6 +65,7 @@
 		1E14540B2045E7CC002B5BDD /* visionTesseract */ = {
 			isa = PBXGroup;
 			children = (
+				8320758E2049C0F500BC5419 /* Classes */,
 				1E0944FE2049957C00E62759 /* tessdata */,
 				1EBC22242045E8F200738CE7 /* ViewControllers */,
 				1E14540C2045E7CC002B5BDD /* AppDelegate.swift */,
@@ -83,6 +84,13 @@
 				1E0945042049A13000E62759 /* PhotoViewController.swift */,
 			);
 			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		8320758E2049C0F500BC5419 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Classes;
 			sourceTree = "<group>";
 		};
 		8D2BBAB0421E476C7F6428E7 /* Frameworks */ = {
