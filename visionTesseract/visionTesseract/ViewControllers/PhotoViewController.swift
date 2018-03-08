@@ -29,24 +29,30 @@ class PhotoViewController: UIViewController {
         imageCropped = UIImageView.init(frame: CGRect(x: 10, y: 450, width:imageView.frame.width, height: imageView.frame.height))
         if let availableImage = takenPhoto?.scaleImage(1080) {
             
+           
             imageView.image = availableImage
 
-            imageView.contentMode = .scaleAspectFit
+            imageView.contentMode = .scaleToFill
             if ViewController.isReverso == false{
                 analyze()
+                
                 switch ViewController.count {
                 case 0:
                     print("Tome una foto del anverso de una credencial")
+                    
                 case 1:
                     print("Es IFE")
+                    
                 case 2:
                     print("Es INE")
+                    
                 default:
                     break
                 }
             }else if ViewController.isReverso == true {
                 btnNext.removeFromSuperview()
                 analyze()
+                
                 if ViewController.countReverso == 0{
                     switch ViewController.count {
                     case 1:
@@ -56,13 +62,15 @@ class PhotoViewController: UIViewController {
                     default:
                         break
                     }
+                    
                 }else{
                     print("tome la foto del reverso de la credencial")
                 }
             }
-            imageView.contentMode = .scaleToFill
+            
+            
             startTextDetection()
-            self.performImageRecognition(self.cropImageFrontLeft(screenshot: (takenPhoto!.scaleImage(1080))!))
+            self.performImageRecognition(self.cropImageFrontLeft(screenshot: (imageView.image!.scaleImage(1080))!))
 
         }
     }
@@ -109,11 +117,11 @@ class PhotoViewController: UIViewController {
                     let iImage = self.imageCropped.layer.asImage(rect: cgrect)                    
                     var isCorrect:Bool = false
                     var arrWords = [String]()
-                    if let tesseract = G8Tesseract.init(language: "spa", engineMode: G8OCREngineMode.tesseractOnly){
+                    if let tesseract = G8Tesseract.init(language: "spa+Arial", engineMode: G8OCREngineMode.tesseractOnly){
                         var count: Int = 0
                         while(isCorrect != true){
                             //teseract
-                            tesseract.image = iImage.g8_blackAndWhite()
+                            tesseract.image = iImage.GARFilter()!
                             tesseract.recognize()
                             tesseract.pageSegmentationMode = .autoOSD
                             tesseract.charWhitelist = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZÁÉÍÓÚ ,0123456789 -."
@@ -139,6 +147,7 @@ class PhotoViewController: UIViewController {
                     }
                     self.indicator.stopAnimating()
                 }
+                self.imageView.image = self.imageView.image?.GARFilter()!
             }
             //self.count += 1
             //self.analizeImage()
