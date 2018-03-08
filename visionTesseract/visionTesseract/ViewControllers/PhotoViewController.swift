@@ -34,7 +34,13 @@ class PhotoViewController: UIViewController {
                 analyze()
                 switch ViewController.count {
                 case 0:
+                    let actionSheet = UIAlertControllerStyle.actionSheet
+                    let alert = UIAlertController(title:("Aviso"), message: "Es necesario que el promotor y el trabajador firmen en los recuadros correspondientes.", preferredStyle:  actionSheet )
+                    let aceptarAction = UIAlertAction(title: "Aceptar", style: .cancel, handler: nil)
+                    alert.addAction(aceptarAction)
+                    self.present(alert, animated: true, completion: nil)
                     print("Tome una foto del anverso de una credencial")
+                    self.dismiss(animated: true, completion: nil)
                 case 1:
                     print("Es IFE")
                 case 2:
@@ -56,36 +62,32 @@ class PhotoViewController: UIViewController {
                     }
                 }else{
                     print("tome la foto del reverso de la credencial")
+                    self.dismiss(animated: true, completion: nil)
                 }
             }
             startTextDetection()
             //self.performImageRecognition(self.cropImageFrontLeftName(screenshot: (imageView.image?.g8_blackAndWhite())!))
-
             //self.performImageRecognition(self.cropImageFrontLeftDir(screenshot: (imageView.image?.g8_blackAndWhite())!))
-            
         }
+        
     }
     
     @IBAction func goBack(_ sender: Any) {
         self.dismiss(animated: true, completion: nil)
+        ViewController.count = 0
     }
     
     @IBAction func goNext(_ sender: Any) {
         self.dismiss(animated: true, completion: nil)
-        
         if ViewController.count != 0{
             ViewController.isReverso = true
         }
-        
     }
-    
     
     //Vision Text Detection
     func startTextDetection(){
-        
         let textRequest = VNDetectTextRectanglesRequest(completionHandler: self.detectTextHandler)
         textRequest.reportCharacterBoxes = true
-        
         self.requests = [textRequest]
     }
     
@@ -323,60 +325,42 @@ class PhotoViewController: UIViewController {
         
         let layers: [CAShapeLayer] = observations.map { observation in
             
-//            let w = observation.boundingBox.size.width * imageRect.width
-//            let h = observation.boundingBox.size.height * imageRect.height
-//            let x = observation.boundingBox.origin.x * imageRect.width
-//            let y = imageRect.maxY - (observation.boundingBox.origin.y * imageRect.height) - h
-//
+            let w = observation.boundingBox.size.width * imageRect.width
+            let h = observation.boundingBox.size.height * imageRect.height
+            let x = observation.boundingBox.origin.x * imageRect.width
+            let y = imageRect.maxY - (observation.boundingBox.origin.y * imageRect.height) - h
+
             if ViewController.isReverso == false{
-                ViewController.count += 1
+                if x > 200 && w > 60 {
+                    ViewController.count += 1
+                }else if x < 100 && w > 60{
+                    ViewController.count += 2
+                }
+                
             }else if ViewController.isReverso == true{
                 ViewController.countReverso += 1
             }
             
-//            print("----")
-//            print("W: ", w)
-//            print("H: ", h)
-//            print("X: ", x)
-//            print("Y: ", y)
-//
-//
+            print("----")
+            print("W: ", w)
+            print("H: ", h)
+            print("X: ", x)
+            print("Y: ", y)
+           
+
             let layer = CAShapeLayer()
-            //layer.frame = CGRect(x: x , y: y, width: w, height: h)
+            layer.frame = CGRect(x: x , y: y, width: w, height: h)
             layer.borderColor = UIColor.red.cgColor
             layer.borderWidth = 2
             layer.cornerRadius = 3
             return layer
-            
+        }
+        for layer in layers {
+            imageView!.layer.addSublayer(layer)
         }
     }
 }
 
-
-// MARK: - UIImagePickerControllerDelegate
-extension PhotoViewController: UIImagePickerControllerDelegate {
-    
-    func imagePickerController(_ picker: UIImagePickerController,
-                               didFinishPickingMediaWithInfo info: [String : Any]) {
-        
-        if let image = info[UIImagePickerControllerEditedImage] as? UIImage, let scaledImage = image.scaleImage(1080){
-            print("entro a 1")
-            indicator.startAnimating()
-            
-            dismiss(animated: true, completion: {
-                self.performImageRecognition(scaledImage)
-            })
-        }else if let selectedPhoto = info[UIImagePickerControllerOriginalImage] as? UIImage,
-            let scaledImage = selectedPhoto.scaleImage(1080) {
-            print("entro a 2")
-            indicator.startAnimating()
-            
-            dismiss(animated: true, completion: {
-                self.performImageRecognition(scaledImage)
-            })
-        }
-    }
-}
 
 // MARK: - UIImage extension
 extension UIImage {
