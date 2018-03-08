@@ -51,6 +51,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         if ViewController.isReverso == false{
             ViewController.lblFoto.text = "Tome la foto del anverso de la credencial"
         }else if ViewController.isReverso == true {
+            
             ViewController.lblFoto.text = "Tome la foto del reverso de la credencial"
         }
         
