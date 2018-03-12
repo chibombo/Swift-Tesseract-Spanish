@@ -14,18 +14,46 @@ import AVFoundation
 class PhotoViewController: UIViewController {
     
     var takenPhoto:UIImage?
+    var isIpad = true
+    let screenSize = UIScreen.main.bounds.size
     var requests: [VNRequest] = [VNRequest]()        
     var imageCropped: UIImageView!
     var imageOne: UIImage!
     var count: Int8 = 1
-    @IBOutlet weak var btnNext: UIButton!
-    @IBOutlet weak var imageView: UIImageView!
+    var btnNext: UIButton!
+    var btnBack:UIButton!
+    var imageView: UIImageView!
     @IBOutlet weak var tfData: UITextView!
     @IBOutlet weak var indicator: UIActivityIndicatorView!
     
     override func viewDidLoad() {
         
         super.viewDidLoad()
+        
+        btnBack = UIButton(frame:CGRect(x:10,
+                                        y: screenSize.height * 0.01,
+                                        width:screenSize.width * 0.1,
+                                        height:screenSize.height * 0.1 ))
+        btnBack.setTitle("Atras", for: .normal)
+        btnBack.setTitleColor(UIColor.blue, for: .normal)
+        btnBack.addTarget(self, action: #selector(goBack) , for: .touchUpInside)
+        self.view.addSubview(btnBack)
+        
+        btnNext = UIButton(frame:CGRect(x:screenSize.width * 0.8,
+                                        y: btnBack.frame.origin.y,
+                                        width:screenSize.width * 0.2,
+                                        height:screenSize.height * 0.1 ))
+        btnNext.setTitle("Siguiente", for: .normal)
+        btnNext.setTitleColor(UIColor.blue, for: .normal)
+        btnNext.addTarget(self, action: #selector(goNext) , for: .touchUpInside)
+        self.view.addSubview(btnNext)
+        
+        imageView = UIImageView(frame:CGRect(x: isIpad ? screenSize.width/2 - (screenSize.width * 0.8)/2:16,
+                                             y:isIpad ?  screenSize.height * 0.15:58,
+                                             width:isIpad ? screenSize.width * 0.8 :343,
+                                             height:isIpad ? screenSize.height * 0.4:100))
+        self.view.addSubview(imageView)
+        
         imageCropped = UIImageView.init(frame: CGRect(x: 10, y: 450, width:imageView.frame.width, height: imageView.frame.height))
         if let availableImage = takenPhoto?.scaleImage(1080) {
             
@@ -38,17 +66,7 @@ class PhotoViewController: UIViewController {
                 
                 switch ViewController.count {
                 case 0:
-                    let actionSheet = UIAlertControllerStyle.actionSheet
-                    let alert = UIAlertController(title:("Aviso"), message: "Es necesario que el promotor y el trabajador firmen en los recuadros correspondientes.", preferredStyle:  actionSheet )
-                    let aceptarAction = UIAlertAction(title: "Aceptar", style: .cancel, handler: nil)
-                    alert.addAction(aceptarAction)
-                    self.present(alert, animated: true, completion: nil)
                     print("Tome una foto del anverso de una credencial")
-
-                    self.dismiss(animated: true, completion: nil)
-
-                    
-
                 case 1:
                     print("Es IFE")
                     
@@ -92,12 +110,13 @@ class PhotoViewController: UIViewController {
         
     }
     
-    @IBAction func goBack(_ sender: Any) {
+    @objc func goBack() {
         self.dismiss(animated: true, completion: nil)
         ViewController.count = 0
+        
     }
     
-    @IBAction func goNext(_ sender: Any) {
+    @objc func goNext() {
         self.dismiss(animated: true, completion: nil)
         if ViewController.count != 0{
             ViewController.isReverso = true
@@ -158,7 +177,7 @@ class PhotoViewController: UIViewController {
                         self.tfData.text = tesseract.recognizedText
                         //getData(data: arrWords)
                     }
-                    self.indicator.stopAnimating()
+                    //self.indicator.stopAnimating()
                 }
                 self.imageView.image = self.imageView.image?.GARFilter()!
             }
@@ -211,7 +230,7 @@ class PhotoViewController: UIViewController {
         //Imagecrop
         imageCropped.image = image //UIImage(cgImage: (image.cgImage)!, scale: 1.0, orientation: UIImageOrientation.right)
         imageCropped.contentMode = .scaleToFill
-        self.view.addSubview(imageCropped)
+        //self.view.addSubview(imageCropped)
         imageOne = image
         let requestOptions:[VNImageOption : Any] = [:]
         let imageRequest = VNImageRequestHandler.init(cgImage: image.cgImage!, options: requestOptions)
