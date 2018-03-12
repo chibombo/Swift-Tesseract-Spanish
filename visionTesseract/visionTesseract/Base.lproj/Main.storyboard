@@ -17,16 +17,6 @@
                     <view key="view" contentMode="scaleToFill" id="N3j-vt-9hK">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ySe-Hk-kuh">
-                                <rect key="frame" x="157" y="617" width="61" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Capturar"/>
-                                <connections>
-                                    <action selector="takePhoto:" destination="MaC-2f-X7l" eventType="touchUpInside" id="2vo-Aw-crC"/>
-                                </connections>
-                            </button>
-                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="V0G-wh-4Zu"/>
                     </view>
@@ -36,21 +26,6 @@
             </objects>
             <point key="canvasLocation" x="540" y="-228.03598200899552"/>
         </scene>
-        <!--CredencialVC-->
-        <scene sceneID="ryb-o9-oSQ">
-            <objects>
-                <viewController id="IXy-ZF-1ty" customClass="CredencialVC" customModule="visionTesseract" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="wbB-yr-m8Q">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <viewLayoutGuide key="safeArea" id="Kmh-aG-98t"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="5jY-bW-awa" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="540" y="469.1154422788606"/>
-        </scene>
         <!--Photo View Controller-->
         <scene sceneID="nec-Fc-UwL">
             <objects>
@@ -59,23 +34,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="blZ-ph-TOW">
-                                <rect key="frame" x="16" y="58" width="343" height="188"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="188" id="7P0-CR-Zr9"/>
-                                    <constraint firstAttribute="width" constant="343" id="DEa-Yc-oWc"/>
-                                </constraints>
-                            </imageView>
-                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="iuB-BO-4XZ">
-                                <rect key="frame" x="180" y="574" width="20" height="20"/>
-                            </activityIndicatorView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Z5f-Ob-T90">
-                                <rect key="frame" x="22" y="20" width="36" height="30"/>
-                                <state key="normal" title="Atras"/>
-                                <connections>
-                                    <action selector="goBack:" destination="sF7-Vg-E5h" eventType="touchUpInside" id="zSL-lJ-peA"/>
-                                </connections>
-                            </button>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="rFq-g4-4C7">
                                 <rect key="frame" x="19" y="276" width="337" height="128"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -86,36 +44,16 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5Tk-st-oiM">
-                                <rect key="frame" x="304" y="20" width="64" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Siguiente"/>
-                                <connections>
-                                    <action selector="goNext:" destination="sF7-Vg-E5h" eventType="touchUpInside" id="hqK-9Q-CrD"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="rFq-g4-4C7" firstAttribute="leading" secondItem="iuB-BO-4XZ" secondAttribute="trailing" constant="-181" id="0yA-uG-vx0"/>
                             <constraint firstItem="rFq-g4-4C7" firstAttribute="leading" secondItem="z3D-Fi-ib9" secondAttribute="leading" constant="19" id="3UF-An-7HO"/>
-                            <constraint firstItem="z3D-Fi-ib9" firstAttribute="trailing" secondItem="iuB-BO-4XZ" secondAttribute="trailing" constant="175" id="92C-wa-rSl"/>
-                            <constraint firstItem="iuB-BO-4XZ" firstAttribute="top" secondItem="rFq-g4-4C7" secondAttribute="bottom" constant="170" id="CTG-kQ-mMK"/>
-                            <constraint firstItem="blZ-ph-TOW" firstAttribute="centerX" secondItem="rFq-g4-4C7" secondAttribute="centerX" id="CyN-qm-fB0"/>
                             <constraint firstItem="z3D-Fi-ib9" firstAttribute="trailing" secondItem="rFq-g4-4C7" secondAttribute="trailing" constant="19" id="ECc-8w-X4G"/>
-                            <constraint firstItem="blZ-ph-TOW" firstAttribute="top" secondItem="Z5f-Ob-T90" secondAttribute="bottom" constant="8" symbolic="YES" id="X2u-nU-Pd2"/>
-                            <constraint firstItem="iuB-BO-4XZ" firstAttribute="leading" secondItem="z3D-Fi-ib9" secondAttribute="leading" constant="180" id="XQd-tm-Hbc"/>
-                            <constraint firstItem="Z5f-Ob-T90" firstAttribute="leading" secondItem="z3D-Fi-ib9" secondAttribute="leading" constant="22" id="aZv-k0-iXJ"/>
-                            <constraint firstItem="rFq-g4-4C7" firstAttribute="top" secondItem="blZ-ph-TOW" secondAttribute="bottom" constant="30" id="cZX-9r-oqZ"/>
                             <constraint firstItem="z3D-Fi-ib9" firstAttribute="bottom" secondItem="rFq-g4-4C7" secondAttribute="bottom" constant="263" id="ctr-uQ-GKV"/>
-                            <constraint firstItem="z3D-Fi-ib9" firstAttribute="bottom" secondItem="iuB-BO-4XZ" secondAttribute="bottom" constant="73" id="dGd-rF-LLe"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="z3D-Fi-ib9"/>
                     </view>
                     <connections>
-                        <outlet property="btnNext" destination="5Tk-st-oiM" id="w5N-am-MdL"/>
-                        <outlet property="imageView" destination="blZ-ph-TOW" id="ywX-ZH-8CN"/>
-                        <outlet property="indicator" destination="iuB-BO-4XZ" id="Voz-5f-AK9"/>
                         <outlet property="tfData" destination="rFq-g4-4C7" id="DsD-TU-r3n"/>
                     </connections>
                 </viewController>
