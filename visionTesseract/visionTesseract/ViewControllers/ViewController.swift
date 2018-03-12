@@ -16,7 +16,8 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     
     var captureDevice:AVCaptureDevice!
     
-    var takePhoto = false
+    @objc var takePhoto = false
+    var isIpad:Bool = true
     static var isReverso:Bool = false
     static var count: Int = 0
     static var countReverso:Int = 0
@@ -35,9 +36,9 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         super.viewWillAppear(animated)
         
         prepareCamera()
-        ViewController.imgCredencial = UIImageView(frame: CGRect(x: screenSize.width/2 - (screenSize.width * 0.95)/2,
+        ViewController.imgCredencial = UIImageView(frame: CGRect(x: screenSize.width/2 - (isIpad ? (screenSize.width * 0.75)/2:(screenSize.width * 0.95)/2),
                                                                  y: screenSize.height/2 - (screenSize.height * 0.35)/2,
-                                                                 width: screenSize.width * 0.95,
+                                                                 width: isIpad ?  screenSize.width * 0.75:screenSize.width * 0.95,
                                                                  height: screenSize.height * 0.35))
         ViewController.imgCredencial.layer.borderWidth = 3
         ViewController.imgCredencial.layer.cornerRadius = 5
@@ -61,6 +62,14 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         ViewController.lblFoto.textAlignment = .center
         self.view.addSubview(ViewController.lblFoto)
         
+        btnCapturar = UIButton(frame: CGRect(x:screenSize.width/2 - (screenSize.width * 0.3)/2,
+                                             y:screenSize.height * 0.8,
+                                             width: screenSize.width * 0.3,
+                                             height:screenSize.height * 0.1))
+        btnCapturar.setTitle("Capturar", for: .normal)
+        btnCapturar.addTarget(self, action: #selector(takesPhoto), for: .touchUpInside)
+        btnCapturar.setTitleColor(UIColor.blue, for: .normal)
+        self.view.addSubview(btnCapturar)
     }
     
     func prepareCamera() {
@@ -106,7 +115,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         
     }
     
-    @IBAction func takePhoto(_ sender: Any) {
+    @objc func takesPhoto() {
         takePhoto = true
     }
     
@@ -136,7 +145,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
             let ciImage = CIImage(cvPixelBuffer: pixelBuffer)
             let context = CIContext()
             
-            let imageRect = CGRect(x: 280, y: 40, width: 450, height: 650)
+            let imageRect = CGRect(x: isIpad ? 450:280, y:isIpad ? 170:40, width:isIpad ? 950:450, height: isIpad ? 1600:650)
             
             if let image = context.createCGImage(ciImage, from: imageRect) {
                 return UIImage(cgImage: image, scale: UIScreen.main.scale, orientation: .right)
