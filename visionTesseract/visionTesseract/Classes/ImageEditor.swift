@@ -45,7 +45,7 @@ extension UIImage{
         }
         let context = CIContext()
         filter.setValue(ciImage, forKey: kCIInputImageKey)
-        if let imageOutPut = filter.outputImage?.applyingFilter("CIColorControls", parameters: [kCIInputContrastKey: 3, kCIInputBrightnessKey: 0.98, kCIInputSaturationKey: 0]), let image = context.createCGImage(imageOutPut, from: imageOutPut.extent){
+        if let imageOutPut = filter.outputImage?.applyingFilter("CIColorControls", parameters: [kCIInputContrastKey: 3, kCIInputBrightnessKey: 0.80, kCIInputSaturationKey: 0]), let image = context.createCGImage(imageOutPut, from: imageOutPut.extent){
             
             let result = UIImage.init(cgImage: image, scale: 1.0, orientation: .up)
             return result
