@@ -14,7 +14,7 @@ import AVFoundation
 class PhotoViewController: UIViewController {
     
     var takenPhoto:UIImage?
-    var isIpad = true
+    var isIpad = false
     let screenSize = UIScreen.main.bounds.size
     var requests: [VNRequest] = [VNRequest]()        
     var imageCropped: UIImageView!
@@ -30,11 +30,13 @@ class PhotoViewController: UIViewController {
         
         super.viewDidLoad()
         
-        btnBack = UIButton(frame:CGRect(x:10,
+        btnBack = UIButton(frame:CGRect(x:5,
                                         y: screenSize.height * 0.01,
-                                        width:screenSize.width * 0.1,
+                                        width:screenSize.width * 0.15,
                                         height:screenSize.height * 0.1 ))
         btnBack.setTitle("Atras", for: .normal)
+        btnBack.titleLabel?.textAlignment = .center
+        btnBack.titleLabel?.font = UIFont.boldSystemFont(ofSize: isIpad ? 20:15)
         btnBack.setTitleColor(UIColor.blue, for: .normal)
         btnBack.addTarget(self, action: #selector(goBack) , for: .touchUpInside)
         self.view.addSubview(btnBack)
@@ -44,6 +46,8 @@ class PhotoViewController: UIViewController {
                                         width:screenSize.width * 0.2,
                                         height:screenSize.height * 0.1 ))
         btnNext.setTitle("Siguiente", for: .normal)
+        btnNext.titleLabel?.textAlignment = .center
+        btnNext.titleLabel?.font = UIFont.boldSystemFont(ofSize: isIpad ? 20:15)
         btnNext.setTitleColor(UIColor.blue, for: .normal)
         btnNext.addTarget(self, action: #selector(goNext) , for: .touchUpInside)
         self.view.addSubview(btnNext)
@@ -63,16 +67,19 @@ class PhotoViewController: UIViewController {
             imageView.contentMode = .scaleToFill
             if ViewController.isReverso == false{
                 analyze()
-                
                 switch ViewController.count {
                 case 0:
+                    DispatchQueue.main.async {
+                        self.dismiss(animated: true, completion: nil)
+                    }
                     print("Tome una foto del anverso de una credencial")
+                    ViewController.isCorrect1 = false
                 case 1:
+                    ViewController.isCorrect1 = true
                     print("Es IFE")
-                    
                 case 2:
+                    ViewController.isCorrect1 = true
                     print("Es INE")
-                    
                 default:
                     break
                 }
@@ -84,15 +91,20 @@ class PhotoViewController: UIViewController {
                     switch ViewController.count {
                     case 1:
                         print("Es IFE reverso")
+                        ViewController.isCorrect2 = true
                     case 2:
                         print("Es INE reverso")
+                         ViewController.isCorrect2 = true
                     default:
                         break
                     }
                     
                 }else{
+                    DispatchQueue.main.async {
+                        self.dismiss(animated: true, completion: nil)
+                    }
                     print("tome la foto del reverso de la credencial")
-                    self.dismiss(animated: true, completion: nil)
+                    ViewController.isCorrect2 = false
                 }
             }
             

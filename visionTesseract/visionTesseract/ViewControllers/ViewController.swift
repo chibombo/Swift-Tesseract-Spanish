@@ -17,11 +17,12 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     var captureDevice:AVCaptureDevice!
     
     @objc var takePhoto = false
-    var isIpad:Bool = true
+    var isIpad:Bool = false
     static var isReverso:Bool = false
     static var count: Int = 0
     static var countReverso:Int = 0
-    
+    static var isCorrect1:Bool = true
+    static var isCorrect2:Bool = true
     let screenSize = UIScreen.main.bounds.size
     public static var imgCredencial: UIImageView!
     public static var lblFoto: UILabel!
@@ -61,14 +62,26 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         ViewController.lblFoto.textAlignment = .center
         self.view.addSubview(ViewController.lblFoto)
         
-        btnCapturar = UIButton(frame: CGRect(x:screenSize.width/2 - (screenSize.width * 0.3)/2,
-                                             y:screenSize.height * 0.8,
-                                             width: screenSize.width * 0.3,
-                                             height:screenSize.height * 0.1))
-        btnCapturar.setTitle("Capturar", for: .normal)
+        btnCapturar = UIButton(frame: CGRect(x:screenSize.width/2 - (screenSize.width * 0.17)/2,
+                                             y:screenSize.height * 0.89,
+                                             width: screenSize.width * 0.17,
+                                             height:screenSize.width * 0.17))
+        btnCapturar.backgroundColor = UIColor.white
+        btnCapturar.layer.cornerRadius = btnCapturar.frame.height/2
         btnCapturar.addTarget(self, action: #selector(takesPhoto), for: .touchUpInside)
         btnCapturar.setTitleColor(UIColor.blue, for: .normal)
         self.view.addSubview(btnCapturar)
+        
+        if ViewController.isCorrect1 == false{
+            let errorAlert:UIAlertController = UIAlertController(title: "Error", message: "Tome una foto del anverso de una credencial", preferredStyle: UIAlertControllerStyle.alert)
+            errorAlert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+            self.present(errorAlert, animated: true, completion: nil)
+        }
+        if ViewController.isCorrect2 == false{
+            let errorAlert:UIAlertController = UIAlertController(title: "Error", message: "Tome una foto del reverso de una credencial", preferredStyle: UIAlertControllerStyle.alert)
+            errorAlert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+            self.present(errorAlert, animated: true, completion: nil)
+        }
     }
     
     func prepareCamera() {
@@ -124,11 +137,8 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
             takePhoto = false
             
             if let image = self.getImageFromSampleBuffer(buffer: sampleBuffer) {
-                
                 let photoVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "PhotoVC") as! PhotoViewController
-                
                 photoVC.takenPhoto = image
-                
                 DispatchQueue.main.async {
                     self.present(photoVC, animated: true, completion: {
                         self.stopCaptureSession()

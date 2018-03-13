@@ -13,11 +13,11 @@
         <!--View Controller-->
         <scene sceneID="7iv-J4-bja">
             <objects>
-                <viewController id="MaC-2f-X7l" customClass="ViewController" customModule="visionTesseract" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="CameraVC" id="MaC-2f-X7l" customClass="ViewController" customModule="visionTesseract" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="N3j-vt-9hK">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="V0G-wh-4Zu"/>
                     </view>
                     <navigationItem key="navigationItem" id="Ngw-HF-jgY"/>
@@ -59,7 +59,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="WtH-aW-oIX" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1314.4000000000001" y="-228.03598200899552"/>
+            <point key="canvasLocation" x="1351" y="-228"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="Atv-v4-GOO">
@@ -77,7 +77,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="U48-Y7-YXF" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-212" y="-228"/>
+            <point key="canvasLocation" x="540" y="-988"/>
         </scene>
     </scenes>
 </document>
