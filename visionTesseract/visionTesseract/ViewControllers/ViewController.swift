@@ -17,7 +17,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     var captureDevice:AVCaptureDevice!
     
     @objc var takePhoto = false
-    var isIpad:Bool = true
+    var isIpad:Bool = false
     static var isReverso:Bool = false
     static var count: Int = 0
     static var countReverso:Int = 0
