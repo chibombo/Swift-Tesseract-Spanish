@@ -13,21 +13,11 @@
         <!--View Controller-->
         <scene sceneID="7iv-J4-bja">
             <objects>
-                <viewController id="MaC-2f-X7l" customClass="ViewController" customModule="visionTesseract" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="CameraVC" id="MaC-2f-X7l" customClass="ViewController" customModule="visionTesseract" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="N3j-vt-9hK">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ySe-Hk-kuh">
-                                <rect key="frame" x="157" y="617" width="61" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Capturar"/>
-                                <connections>
-                                    <action selector="takePhoto:" destination="MaC-2f-X7l" eventType="touchUpInside" id="2vo-Aw-crC"/>
-                                </connections>
-                            </button>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="V0G-wh-4Zu"/>
                     </view>
                     <navigationItem key="navigationItem" id="Ngw-HF-jgY"/>
@@ -44,29 +34,32 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Z5f-Ob-T90">
-                                <rect key="frame" x="22" y="20" width="34" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Back"/>
-                                <connections>
-                                    <action selector="goBack:" destination="sF7-Vg-E5h" eventType="touchUpInside" id="zSL-lJ-peA"/>
-                                </connections>
-                            </button>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="blZ-ph-TOW">
-                                <rect key="frame" x="16" y="58" width="343" height="319"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                            </imageView>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="rFq-g4-4C7">
+                                <rect key="frame" x="19" y="276" width="337" height="128"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="337" id="JJt-fy-N4L"/>
+                                    <constraint firstAttribute="height" constant="128" id="aKz-ff-5si"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="rFq-g4-4C7" firstAttribute="leading" secondItem="z3D-Fi-ib9" secondAttribute="leading" constant="19" id="3UF-An-7HO"/>
+                            <constraint firstItem="z3D-Fi-ib9" firstAttribute="trailing" secondItem="rFq-g4-4C7" secondAttribute="trailing" constant="19" id="ECc-8w-X4G"/>
+                            <constraint firstItem="z3D-Fi-ib9" firstAttribute="bottom" secondItem="rFq-g4-4C7" secondAttribute="bottom" constant="263" id="ctr-uQ-GKV"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="z3D-Fi-ib9"/>
                     </view>
                     <connections>
-                        <outlet property="imageView" destination="blZ-ph-TOW" id="ywX-ZH-8CN"/>
+                        <outlet property="tfData" destination="rFq-g4-4C7" id="DsD-TU-r3n"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="WtH-aW-oIX" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1314.4000000000001" y="-228.03598200899552"/>
+            <point key="canvasLocation" x="1351" y="-228"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="Atv-v4-GOO">
@@ -84,7 +77,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="U48-Y7-YXF" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-212" y="-228"/>
+            <point key="canvasLocation" x="540" y="-988"/>
         </scene>
     </scenes>
 </document>

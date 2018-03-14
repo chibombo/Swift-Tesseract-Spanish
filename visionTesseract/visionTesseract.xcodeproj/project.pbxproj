@@ -14,6 +14,7 @@
 		1E1454122045E7CD002B5BDD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1E1454102045E7CD002B5BDD /* Main.storyboard */; };
 		1E1454172045E7CD002B5BDD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1E1454162045E7CD002B5BDD /* Assets.xcassets */; };
 		1E14541A2045E7CD002B5BDD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1E1454182045E7CD002B5BDD /* LaunchScreen.storyboard */; };
+		83A58D1D204F1C7D00CB7204 /* ImageEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A58D1C204F1C7D00CB7204 /* ImageEditor.swift */; };
 		99E8DA131BCA5390F55B3467 /* Pods_visionTesseract.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD02171D77E1DC6A5B1DD09D /* Pods_visionTesseract.framework */; };
 /* End PBXBuildFile section */
 
@@ -27,6 +28,7 @@
 		1E1454162045E7CD002B5BDD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1E1454192045E7CD002B5BDD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		1E14541B2045E7CD002B5BDD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		83A58D1C204F1C7D00CB7204 /* ImageEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageEditor.swift; sourceTree = "<group>"; };
 		B7EAF0EDED3D9103779661DC /* Pods-visionTesseract.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-visionTesseract.debug.xcconfig"; path = "Pods/Target Support Files/Pods-visionTesseract/Pods-visionTesseract.debug.xcconfig"; sourceTree = "<group>"; };
 		CD02171D77E1DC6A5B1DD09D /* Pods_visionTesseract.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_visionTesseract.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E9C1EEC548B510529CA48DE9 /* Pods-visionTesseract.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-visionTesseract.release.xcconfig"; path = "Pods/Target Support Files/Pods-visionTesseract/Pods-visionTesseract.release.xcconfig"; sourceTree = "<group>"; };
@@ -65,6 +67,7 @@
 		1E14540B2045E7CC002B5BDD /* visionTesseract */ = {
 			isa = PBXGroup;
 			children = (
+				8320758E2049C0F500BC5419 /* Classes */,
 				1E0944FE2049957C00E62759 /* tessdata */,
 				1EBC22242045E8F200738CE7 /* ViewControllers */,
 				1E14540C2045E7CC002B5BDD /* AppDelegate.swift */,
@@ -83,6 +86,14 @@
 				1E0945042049A13000E62759 /* PhotoViewController.swift */,
 			);
 			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		8320758E2049C0F500BC5419 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				83A58D1C204F1C7D00CB7204 /* ImageEditor.swift */,
+			);
+			path = Classes;
 			sourceTree = "<group>";
 		};
 		8D2BBAB0421E476C7F6428E7 /* Frameworks */ = {
@@ -234,6 +245,7 @@
 			files = (
 				1E0945032049A10E00E62759 /* ViewController.swift in Sources */,
 				1E14540D2045E7CC002B5BDD /* AppDelegate.swift in Sources */,
+				83A58D1D204F1C7D00CB7204 /* ImageEditor.swift in Sources */,
 				1E0945052049A13000E62759 /* PhotoViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
