@@ -21,7 +21,7 @@ class PhotoViewController: UIViewController {
     var imageOne: UIImage!
     var count: Int8 = 1
 
-     var arrWords = [String]()
+    var arrWords = [String]()
     var c = 0
     
     
@@ -102,29 +102,38 @@ class PhotoViewController: UIViewController {
                     self.performImageRecognition(self.cropImageFrontLeftName(screenshot: (takenPhoto!.scaleImage(1080)?.g8_blackAndWhite())!))
                     
                     self.imageView.image = availableImage
-                    self.delayExecutionByMilliseconds(500) {
+                    self.delayExecutionByMilliseconds(1000) {
                         self.startTextDetection()
                         self.performImageRecognition(self.cropImageFrontLeftDir(screenshot: (self.takenPhoto!.scaleImage(1080)?.g8_blackAndWhite())!))
                         
                         self.imageView.image = availableImage
-                        self.delayExecutionByMilliseconds(500) {
+                        
+                        self.delayExecutionByMilliseconds(1000) {
                             self.startTextDetection()
                             self.performImageRecognition(self.cropImageFrontLeftFolRegEleCurp(screenshot: (self.takenPhoto!.scaleImage(1080)?.g8_blackAndWhite())!))
                             
                             self.imageView.image = availableImage
+
                             self.delayExecutionByMilliseconds(1000) {
                                 self.startTextDetection()
-
-                                self.performImageRecognition(self.cropImageFrontLeftOtherData(screenshot: (self.takenPhoto!.scaleImage(1080)?.g8_blackAndWhite())!))
-
+    
+                                self.performImageRecognition(self.cropImageFrontLeftReg(screenshot: (self.takenPhoto!.scaleImage(1080)?.g8_blackAndWhite())!))
+    
                                 self.imageView.image = availableImage
                                 self.delayExecutionByMilliseconds(1000) {
                                     self.startTextDetection()
-
-                                    self.performImageRecognition(self.cropImageFrontLeftOtherData2(screenshot: (self.takenPhoto!.scaleImage(1080)?.g8_blackAndWhite())!))
-
-                                    self.delayExecutionByMilliseconds(100) {
-                                        self.showData2()
+    
+                                    self.performImageRecognition(self.cropImageFrontLeftOtherData(screenshot: (self.takenPhoto!.scaleImage(1080)?.g8_blackAndWhite())!))
+    
+                                    self.imageView.image = availableImage
+                                    self.delayExecutionByMilliseconds(1000) {
+                                        self.startTextDetection()
+    
+                                        self.performImageRecognition(self.cropImageFrontLeftOtherData2(screenshot: (self.takenPhoto!.scaleImage(1080)?.g8_blackAndWhite())!))
+    
+                                        self.delayExecutionByMilliseconds(100) {
+                                            self.showData2()
+                                        }
                                     }
                                 }
                             }
@@ -224,10 +233,6 @@ class PhotoViewController: UIViewController {
     
     func showData2(){
         var startIndex: String.Index
-        var endIndex: String.Index
-        var count = 0
-        var countAux = 0
-        
         var data = [String]()
         
         for item  in arrWords {
@@ -242,35 +247,49 @@ class PhotoViewController: UIViewController {
         data.indices.contains(4) ? dir.append(data[4])      : (dir          = "No reconocido")
         data.indices.contains(5) ? dir.append(data[5])      : (dir          = "No reconocido")
         data.indices.contains(6) ? folio.append(data[6])    : (folio        = "No reconocido")
-        data.indices.contains(7) ? anioRegistro = data[7]   : (anioRegistro = "No reconocido")
-        data.indices.contains(8) ? claveElector = data[8]   : (claveElector = "No reconocido")
+        data.indices.contains(8) ? claveElector = claveElector == "" ? "No reconocido" : data[8] : (claveElector = "No reconocido")
         data.indices.contains(9) ? curp = data[9]           : (curp         = "No reconocido")
-        data.indices.contains(10) ? estado = data[10]       : (estado       = "No reconocido")
-        data.indices.contains(11) ? localidad = data[11]    : (localidad    = "No reconocido")
-        data.indices.contains(12) ? emision  = data[12]     : (emision      = "No reconocido")
-        data.indices.contains(13) ? municipio = data[13]    : (municipio    = "No reconocido")
-        data.indices.contains(14) ? seccion = data[14]      : (seccion      = "No reconocido")
-        data.indices.contains(15) ? vigencia = data[15]     : (vigencia     = "No reconocido")
+        data.indices.contains(10) ? anioRegistro = data[10]   : (anioRegistro = "No reconocido")
+        data.indices.contains(11) ? estado = data[11]       : (estado       = "No reconocido")
+        data.indices.contains(12) ? localidad = data[12]    : (localidad    = "No reconocido")
+        data.indices.contains(13) ? emision  = data[13]     : (emision      = "No reconocido")
+        data.indices.contains(14) ? municipio = data[14]    : (municipio    = "No reconocido")
+        data.indices.contains(15) ? seccion = data[15]      : (seccion      = "No reconocido")
+        data.indices.contains(16) ? vigencia = data[16]     : (vigencia     = "No reconocido")
+
         
-        
-        startIndex = folio.index(folio.endIndex, offsetBy: -13)
-        folio = String(folio[startIndex..<folio.endIndex])
-        
-        startIndex = anioRegistro.index(anioRegistro.endIndex, offsetBy: -7)
-        anioRegistro = String(anioRegistro[startIndex..<anioRegistro.endIndex])
-        
-        startIndex = claveElector.index(claveElector.endIndex, offsetBy: -13)
-        claveElector = String(claveElector[startIndex..<claveElector.endIndex])
-        
-        startIndex = curp.index(curp.endIndex, offsetBy: -18)
-        curp = String(curp[startIndex..<curp.endIndex])
-        
-        startIndex = municipio.index(municipio.endIndex, offsetBy: -3)
-        municipio = String(municipio[startIndex..<municipio.endIndex])
-        
-        startIndex = vigencia.index(vigencia.endIndex, offsetBy: -4)
-        vigencia = String(vigencia[startIndex..<vigencia.endIndex])
-        
+        estado = estado.replacingOccurrences(of: "Q", with: "9").replacingOccurrences(of: "O", with: "0")
+        localidad = localidad.replacingOccurrences(of: " ", with: "").replacingOccurrences(of: "O", with: "0")
+        emision = emision.replacingOccurrences(of: " ", with: "").replacingOccurrences(of: "O", with: "0")
+        municipio = municipio.replacingOccurrences(of: " ", with: "").replacingOccurrences(of: "O", with: "0")
+        seccion = seccion.replacingOccurrences(of: " ", with: "").replacingOccurrences(of: "O", with: "0")
+        vigencia = vigencia.replacingOccurrences(of: " ", with: "").replacingOccurrences(of: "O", with: "0")
+
+        if folio.count > 13{
+            startIndex = folio.index(folio.endIndex, offsetBy: -13)
+            folio = String(folio[startIndex..<folio.endIndex])
+        }
+        if anioRegistro.count > 7{
+            startIndex = anioRegistro.index(anioRegistro.endIndex, offsetBy: -7)
+            anioRegistro = String(anioRegistro[startIndex..<anioRegistro.endIndex])
+        }
+        if claveElector.count > 13{
+            startIndex = claveElector.index(claveElector.endIndex, offsetBy: -13)
+            claveElector = String(claveElector[startIndex..<claveElector.endIndex])
+        }
+        if curp.count > 18{
+            startIndex = curp.index(curp.endIndex, offsetBy: -18)
+            curp = String(curp[startIndex..<curp.endIndex])
+        }
+        if municipio.count > 3{
+            startIndex = municipio.index(municipio.endIndex, offsetBy: -3)
+            municipio = String(municipio[startIndex..<municipio.endIndex])
+        }
+        if vigencia.count > 4{
+            
+            startIndex = vigencia.index(vigencia.endIndex, offsetBy: -4)
+            vigencia = String(vigencia[startIndex..<vigencia.endIndex])
+        }
 
         print("----- Datos -----")
         print(apPaterno)
@@ -289,7 +308,6 @@ class PhotoViewController: UIViewController {
         print("------------------")
         tfData.text = "Paterno: \(apPaterno) \nMaterno: \(apMaterno)\nNombre: \(name)\nDirección: \(dir)\nFolio: \(folio)\nClave Ele: \(claveElector)\nCurp: \(curp)\nAño Registro: \(anioRegistro)\nEdo: \(estado)\nMun: \(municipio)\nSec: \(seccion)\nLocalidad: \(localidad)\nEmisión: \(emision)\nVig: \(vigencia)"
     }
-    
 
     func showData(){
         
@@ -321,6 +339,12 @@ class PhotoViewController: UIViewController {
         data.indices.contains(13) ? anioRegistro = data[13] : (anioRegistro = "No reconocido")
         data.indices.contains(14) ? seccion = data[14]      : (seccion      = "No reconocido")
         data.indices.contains(15) ? vigencia = data[15]     : (vigencia     = "No reconocido")
+        
+        startIndex = claveElector.index(claveElector.endIndex, offsetBy: -13)
+        claveElector = String(claveElector[startIndex..<claveElector.endIndex])
+        
+        startIndex = curp.index(curp.endIndex, offsetBy: -18)
+        curp = String(curp[startIndex..<curp.endIndex])
 
         print("----- Datos -----")
         print(apPaterno)
@@ -487,7 +511,7 @@ class PhotoViewController: UIViewController {
 
     
     func cropImageFrontLeftName(screenshot: UIImage) -> UIImage {
-        let crop = CGRect(x: 30, y: 220, width: 300 , height: 130)
+        let crop = CGRect(x: 30, y: 230, width: 300 , height: 120)
         let cropImage = screenshot.cgImage?.cropping(to: crop)
         let image = UIImage(cgImage: cropImage!)
         return image
@@ -500,22 +524,29 @@ class PhotoViewController: UIViewController {
         return image
     }
     
+    func cropImageFrontLeftReg(screenshot: UIImage) -> UIImage {
+        let crop = CGRect(x: 530, y: 470, width: 200 , height: 80)
+        let cropImage = screenshot.cgImage?.cropping(to: crop)
+        let image = UIImage(cgImage: cropImage!)
+        return image
+    }
+ 
     func cropImageFrontLeftFolRegEleCurp(screenshot: UIImage) -> UIImage {
-        let crop = CGRect(x: 20, y: 470, width: 800 , height: 130)
+        let crop = CGRect(x: 20, y: 470, width: 550 , height: 130)
         let cropImage = screenshot.cgImage?.cropping(to: crop)
         let image = UIImage(cgImage: cropImage!)
         return image
     }
     
     func cropImageFrontLeftOtherData(screenshot: UIImage) -> UIImage {
-        let crop = CGRect(x: 120, y: 570, width: 130 , height: 130)
+        let crop = CGRect(x: 120, y: 580, width: 130 , height: 160)
         let cropImage = screenshot.cgImage?.cropping(to: crop)
         let image = UIImage(cgImage: cropImage!)
         return image
     }
     
     func cropImageFrontLeftOtherData2(screenshot: UIImage) -> UIImage {
-        let crop = CGRect(x: 300, y: 570, width: 220 , height: 130)
+        let crop = CGRect(x: 330, y: 580, width: 220 , height: 130)
         let cropImage = screenshot.cgImage?.cropping(to: crop)
         let image = UIImage(cgImage: cropImage!)
         return image
@@ -525,7 +556,7 @@ class PhotoViewController: UIViewController {
     // Right data
     
     func cropImageFrontRightName(screenshot: UIImage) -> UIImage{
-        let crop = CGRect(x: 340, y: 230, width: 300, height: 125)
+        let crop = CGRect(x: 340, y: 220, width: 300, height: 125)
         let cropImage = screenshot.cgImage?.cropping(to: crop)
         let image = UIImage(cgImage: cropImage!)
         return image
